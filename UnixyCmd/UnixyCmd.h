@@ -16,5 +16,4 @@ FOUNDATION_EXPORT const unsigned char UnixyCmdVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <UnixyCmd/PublicHeader.h>
 
-extern void *main_routine(void *_arg);
-extern int dummy_main(int argc, char *const *argv);
+extern int unixycmd_main(int argc, char *const *argv);

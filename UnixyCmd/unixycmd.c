@@ -5,7 +5,7 @@
 #define SHUTDOWN() {close(STDOUT_FILENO);close(STDERR_FILENO);}
 #define exit(retval) {SHUTDOWN(); pthread_exit((void *)retval);}
 
-int dummy_main(int argc, char *const *argv)
+int unixycmd_main(int argc, char *const *argv)
 {
     printf("argc=%d\n", argc);
     for (int i = 0; i < argc; i++) {

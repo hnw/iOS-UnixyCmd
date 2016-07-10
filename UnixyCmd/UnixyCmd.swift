@@ -10,9 +10,9 @@ import Foundation
 import CStringArray
 
 public class UnixyCmd {
-    typealias VoidPtr = UnsafeMutablePointer<Void>
-    typealias VoidPtrArray = [UnsafeMutablePointer<Void>]
-    typealias CharPtrArray = [UnsafeMutablePointer<CChar>]
+    public typealias VoidPtr = UnsafeMutablePointer<Void>
+    public typealias VoidPtrArray = [UnsafeMutablePointer<Void>]
+    public typealias CharPtrArray = [UnsafeMutablePointer<CChar>]
 
     var args: CStringArray
     var saved_cout: Int32 = -1
@@ -23,7 +23,6 @@ public class UnixyCmd {
     public var cout: String = ""
     public var cerr: String = ""
     public var retval: Int32 = -1
-    let callback = dummy_main
 
     public init(_ _args: [String]) {
         var tmp: [String?] = _args.map { Optional<String>($0) }
@@ -171,12 +170,12 @@ public class UnixyCmd {
             pthread_join(thread, UnsafeMutablePointer<UnsafeMutablePointer<Void>>($0))
         }
     }
-    private func spawn_cmd(thread: UnsafeMutablePointer<pthread_t>, _ thread_arg: VoidPtrArray) {
-        pthread_create(thread, nil, {_args in
-            let args = unsafeBitCast(_args, VoidPtrArray.self)
-            let argc = Int32(unsafeBitCast(args[0], Int.self))
-            let argv = unsafeBitCast(args[1], CharPtrArray.self)
-            let retval = unsafeBitCast(Int(dummy_main(argc, argv)), VoidPtr.self)
+    public func spawn_cmd(thread: UnsafeMutablePointer<pthread_t>, _ thread_arg: VoidPtrArray) -> () {
+        pthread_create(thread, nil, {_arg in
+            let arg = unsafeBitCast(_arg, VoidPtrArray.self)
+            let argc = Int32(unsafeBitCast(arg[0], Int.self))
+            let argv = unsafeBitCast(arg[1], CharPtrArray.self)
+            let retval = unsafeBitCast(Int(unixycmd_main(argc, argv)), VoidPtr.self)
             close(STDOUT_FILENO)
             close(STDERR_FILENO)
             return retval
