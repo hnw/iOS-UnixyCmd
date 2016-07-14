@@ -265,6 +265,7 @@ public class UnixyCmd {
                 if (read_size <= 0) {
                     closeCoutPipe()
                 } else {
+                    buffer[read_size] = 0
                     cout = cout.stringByAppendingString(String.fromCString(buffer)!)
                 }
             }
@@ -273,16 +274,10 @@ public class UnixyCmd {
                 if (read_size <= 0) {
                     closeCerrPipe()
                 } else {
+                    buffer[read_size] = 0
                     cerr = cerr.stringByAppendingString(String.fromCString(buffer)!)
                 }
             }
-            /*
-            if (ctrl_pipe[0] >= 0 && fdIsSet(ctrl_pipe[0], &set)) {
-                closeCtrlPipe()
-             restoreCout()
-             restoreCerr()
-            }
- */
             if (cout_pipe[0] < 0 && cerr_pipe[0] < 0) {
                 restoreCout()
                 restoreCerr()
