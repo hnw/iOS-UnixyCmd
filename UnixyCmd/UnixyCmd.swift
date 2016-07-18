@@ -14,6 +14,7 @@ public class UnixyCmd {
     public typealias VoidPtrArray = [UnsafeMutablePointer<Void>]
     public typealias CharPtrArray = [UnsafeMutablePointer<CChar>]
 
+    let debug = false
     var args: CStringArray
     var saved_cout: Int32 = -1
     var saved_cerr: Int32 = -1
@@ -255,7 +256,9 @@ public class UnixyCmd {
             }
             if (cout_pipe[0] >= 0 && fdIsSet(cout_pipe[0], &set)) {
                 let read_size = read(cout_pipe[0], &buffer, buffer_size)
-                cerr = cerr.stringByAppendingString("cout:read_size=\(read_size)\n")
+                if (debug) {
+                    cerr = cerr.stringByAppendingString("cout:read_size=\(read_size)\n")
+                }
                 if (read_size <= 0) {
                     closeCoutPipe()
                 } else {
@@ -265,7 +268,9 @@ public class UnixyCmd {
             }
             if (cerr_pipe[0] >= 0 && fdIsSet(cerr_pipe[0], &set)) {
                 let read_size = read(cerr_pipe[0], &buffer, buffer_size)
-                cerr = cerr.stringByAppendingString("cerr:read_size=\(read_size)\n")
+                if (debug) {
+                    cerr = cerr.stringByAppendingString("cerr:read_size=\(read_size)\n")
+                }
                 if (read_size <= 0) {
                     closeCerrPipe()
                 } else {
