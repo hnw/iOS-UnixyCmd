@@ -7,9 +7,11 @@
 
 int unixycmd_main(int argc, char *const *argv)
 {
+    fprintf(stderr, "foobar\n");
     printf("argc=%d\n", argc);
     for (int i = 0; i < argc; i++) {
         printf("argv[%d]=%s\n", i, argv[i]);
     }
+    fprintf(stderr, "baz\n");
     return 0;
 }

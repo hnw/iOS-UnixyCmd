@@ -19,14 +19,13 @@ public class UnixyCmd {
     var saved_cerr: Int32 = -1
     var cout_pipe: [Int32] = [-1, -1]
     var cerr_pipe: [Int32] = [-1, -1]
-    var ctrl_pipe: [Int32] = [-1, -1]
     public var cout: String = ""
     public var cerr: String = ""
     public var retval: Int32 = -1
 
     public init(_ _args: [String]) {
         var tmp: [String?] = _args.map { Optional<String>($0) }
-        tmp.append(nil);
+        tmp.append(nil)
         args = CStringArray(tmp)
     }
     /// Replacement for FD_ZERO macro
@@ -223,12 +222,6 @@ public class UnixyCmd {
             saved_cerr = -1
         }
     }
-    private func closeCtrlPipe() {
-        close(ctrl_pipe[0])
-        close(ctrl_pipe[1])
-        ctrl_pipe[0] = -1
-        ctrl_pipe[1] = -1
-    }
     private func closeCoutPipe() {
         if (cout_pipe[0] >= 0) {
             close(cout_pipe[0])
@@ -262,6 +255,7 @@ public class UnixyCmd {
             }
             if (cout_pipe[0] >= 0 && fdIsSet(cout_pipe[0], &set)) {
                 let read_size = read(cout_pipe[0], &buffer, buffer_size)
+                cerr = cerr.stringByAppendingString("cout:read_size=\(read_size)\n")
                 if (read_size <= 0) {
                     closeCoutPipe()
                 } else {
@@ -271,6 +265,7 @@ public class UnixyCmd {
             }
             if (cerr_pipe[0] >= 0 && fdIsSet(cerr_pipe[0], &set)) {
                 let read_size = read(cerr_pipe[0], &buffer, buffer_size)
+                cerr = cerr.stringByAppendingString("cerr:read_size=\(read_size)\n")
                 if (read_size <= 0) {
                     closeCerrPipe()
                 } else {
