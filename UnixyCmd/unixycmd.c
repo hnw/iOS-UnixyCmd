@@ -2,8 +2,7 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#define SHUTDOWN() {close(STDOUT_FILENO);close(STDERR_FILENO);}
-#define exit(retval) {SHUTDOWN(); pthread_exit((void *)retval);}
+static inline void exit(retval) {fflush(stdout);close(STDOUT_FILENO);fflush(stderr);close(STDERR_FILENO);pthread_exit((void *)retval);}
 
 int unixycmd_main(int argc, char *const *argv)
 {
